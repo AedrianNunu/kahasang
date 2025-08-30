@@ -7,6 +7,7 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
 import Image from "next/image";
+import { Separator } from "@/components/ui/separator";
 
 // Animation variants for scroll reveal
 const sectionVariants: Variants = {
@@ -46,28 +47,21 @@ export function Navbar() {
           <span className="text-xl font-pacifico text-black">CHMSU Fisheries</span>
         </Link>
 
-        {/* Centered Navigation and Sign In Button */}
-         <div className="flex-1 flex items-center justify-center absolute left-0 right-0">
+        {/* Centered Navigation */}
+        <div className="flex-1 flex items-center justify-center absolute left-0 right-0">
           <nav className="hidden md:flex items-center space-x-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-sm font-bold text-black hover:text-[#16a34a] transition-colors"
-              >
-                {item.name}
-              </Link>
+            {navItems.map((item, index) => (
+              <React.Fragment key={item.name}>
+                <Link
+                  href={item.href}
+                  className="text-sm font-bold text-black hover:text-[#16a34a] transition-colors"
+                >
+                  {item.name}
+                </Link>
+                {index < navItems.length - 1 && <Separator className="h-5 bg-[#16a34a] opacity-50" orientation="vertical" />}
+              </React.Fragment>
             ))}
           </nav>
-        </div>
-        <div>
-          <Button
-            variant="outline"
-            className="hidden md:block border-[#16a34a] text-[#16a34a] hover:bg-[#16a34a] hover:text-white cursor-pointer"
-            onClick={() => {}}
-          >
-            Sign In
-          </Button>
         </div>
 
         {/* Mobile Navigation */}
@@ -83,15 +77,17 @@ export function Navbar() {
             className="w-[240px] flex flex-col justify-between bg-white"
           >
             <nav className="flex flex-col gap-4 text-center pt-6">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-bold text-black hover:text-[#16a34a] transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
+              {navItems.map((item, index) => (
+                <React.Fragment key={item.name}>
+                  <Link
+                    href={item.href}
+                    className="text-sm font-bold text-black hover:text-[#16a34a] transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                  {index < navItems.length - 1 && <Separator className="my-2 bg-[#000000] opacity-50" />}
+                </React.Fragment>
               ))}
             </nav>
             <div className="mt-6 border-t pt-4 border-black">

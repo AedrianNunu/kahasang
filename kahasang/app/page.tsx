@@ -13,10 +13,20 @@ export default function Home() {
     <>
       <Navbar />
       <HeroSection />
+      {/** Separator between Hero and About */}
+      <div className="w-full h-px bg-[#16a34a] opacity-50 my-8 mx-auto max-w-4xl shadow-md" />
       <AboutSection />
+      {/** Separator between About and Equipment */}
+      <div className="w-full h-px bg-[#16a34a] opacity-50 my-8 mx-auto max-w-4xl shadow-md" />
       <EquipmentSection />
+      {/** Separator between Equipment and ContactUs */}
+      <div className="w-full h-px bg-[#16a34a] opacity-50 my-8 mx-auto max-w-4xl shadow-md" />
       <ContactUsSection />
+      {/** Separator between ContactUs and Faqs */}
+      <div className="w-full h-px bg-[#16a34a] opacity-50 my-8 mx-auto max-w-4xl shadow-md" />
       <FaqsSection />
+      {/** Separator between Faqs and Footer */}
+      <div className="w-full h-px bg-[#16a34a] opacity-50 my-8 mx-auto max-w-4xl shadow-md" />
       <FooterSection />
       <LoginModal />
       <SignupModal />

@@ -12,16 +12,19 @@ import { Eye, EyeOff } from "lucide-react";
 
 // Mock users array for simulation
 const mockUsers = [
-  { email: "user@chmsu.edu", password: "password123", role: "user" },
-  { email: "admin@chmsu.edu", password: "admin123", role: "admin" },
+  { email: "user@chmsu.edu", password: "password123", role: "user", firstName: "John", lastName: "Doe", year: "3", section: "A" },
+  { email: "admin@chmsu.edu", password: "admin123", role: "admin", firstName: "Jane", lastName: "Smith", year: "4", section: "B" },
 ];
 
 export default function SignupModal() {
   const { isCreateAccountOpen, setIsCreateAccountOpen, setIsLoginOpen } = useModalStore();
   const { setUser } = useAuthStore();
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [year, setYear] = useState("");
+  const [section, setSection] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [step, setStep] = useState("email");
@@ -30,8 +33,11 @@ export default function SignupModal() {
   useEffect(() => {
     console.log("Email state:", email);
     if (step === "details") {
+      setFirstName("");
+      setLastName("");
+      setYear("");
+      setSection("");
       setPassword("");
-      setName("");
     }
   }, [email, step]);
 
@@ -72,21 +78,30 @@ export default function SignupModal() {
 
     try {
       const normalizedEmail = email.trim().toLowerCase();
-      console.log("Submitting signup:", { email: normalizedEmail, password: "[hidden]", name });
+      console.log("Submitting signup:", { email: normalizedEmail, password: "[hidden]", firstName, lastName, year, section });
 
       // Simulate signup validation
+      if (!firstName.trim() || !lastName.trim()) {
+        throw new Error("Please enter both first name and last name.");
+      }
+      if (!normalizedEmail.includes("@") || !normalizedEmail.endsWith(".edu")) {
+        throw new Error("Please enter a valid .edu email address.");
+      }
+      if (!year || isNaN(Number(year)) || Number(year) < 1 || Number(year) > 5) {
+        throw new Error("Please enter a valid year (1-5).");
+      }
+      if (!section.trim()) {
+        throw new Error("Please enter your section.");
+      }
       if (password.length < 6) {
         throw new Error("Password must be at least 6 characters long.");
       }
-      if (!name.trim()) {
-        throw new Error("Please enter your full name.");
-      }
 
       // Mock user creation
-      const newUser = { email: normalizedEmail, password, role: "user" };
+      const newUser = { email: normalizedEmail, password, role: "user", firstName, lastName, year, section };
       mockUsers.push(newUser);
       await setUser(newUser);
-      toast.success(`Account created for ${normalizedEmail}!`, {
+      toast.success(`Account created for ${firstName} ${lastName}!`, {
         className:
           "bg-green-100 text-green-800 border border-green-600 rounded-md shadow-sm py-2 px-4 text-sm font-medium",
         duration: 4000,
@@ -148,7 +163,7 @@ export default function SignupModal() {
               {step === "email" ? (
                 <form onSubmit={handleEmailSubmit} className="space-y-4">
                   <div>
-                    <Label htmlFor="email" className="text-black text-sm font-medium mb-1">Email Address</Label>
+                    <Label htmlFor="email" className="text-black text-sm font-medium mb-1">Email</Label>
                     <Input
                       id="email"
                       type="email"
@@ -190,17 +205,83 @@ export default function SignupModal() {
               ) : (
                 <form onSubmit={handleDetailsSubmit} className="space-y-4">
                   <div>
-                    <Label htmlFor="name" className="text-black text-sm font-medium mb-1">Full Name</Label>
+                    <Label htmlFor="firstName" className="text-black text-sm font-medium mb-1">First Name</Label>
                     <Input
-                      id="name"
+                      id="firstName"
                       type="text"
-                      placeholder="Enter your full name"
+                      placeholder="Enter your first name"
                       className="bg-white border-gray-300 text-sm px-3 py-2 focus:border-[#16a34a] focus:ring-[#16a34a]"
-                      value={name}
+                      value={firstName}
                       onChange={(e) => {
                         const value = e.target.value ?? "";
-                        setName(value);
-                        console.log("Name input:", value);
+                        setFirstName(value);
+                        console.log("First Name input:", value);
+                      }}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName" className="text-black text-sm font-medium mb-1">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      type="text"
+                      placeholder="Enter your last name"
+                      className="bg-white border-gray-300 text-sm px-3 py-2 focus:border-[#16a34a] focus:ring-[#16a34a]"
+                      value={lastName}
+                      onChange={(e) => {
+                        const value = e.target.value ?? "";
+                        setLastName(value);
+                        console.log("Last Name input:", value);
+                      }}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email" className="text-black text-sm font-medium mb-1">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      className="bg-white border-gray-300 text-sm px-3 py-2 focus:border-[#16a34a] focus:ring-[#16a34a]"
+                      value={email}
+                      onChange={(e) => {
+                        const value = e.target.value ?? "";
+                        setEmail(value);
+                        console.log("Email input:", value);
+                      }}
+                      required
+                      autoComplete="email"
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="year" className="text-black text-sm font-medium mb-1">Year</Label>
+                    <Input
+                      id="year"
+                      type="number"
+                      placeholder="Enter your year (1-5)"
+                      className="bg-white border-gray-300 text-sm px-3 py-2 focus:border-[#16a34a] focus:ring-[#16a34a]"
+                      value={year}
+                      onChange={(e) => {
+                        const value = e.target.value ?? "";
+                        setYear(value);
+                        console.log("Year input:", value);
+                      }}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="section" className="text-black text-sm font-medium mb-1">Section</Label>
+                    <Input
+                      id="section"
+                      type="text"
+                      placeholder="Enter your section"
+                      className="bg-white border-gray-300 text-sm px-3 py-2 focus:border-[#16a34a] focus:ring-[#16a34a]"
+                      value={section}
+                      onChange={(e) => {
+                        const value = e.target.value ?? "";
+                        setSection(value);
+                        console.log("Section input:", value);
                       }}
                       required
                     />
@@ -259,8 +340,11 @@ export default function SignupModal() {
                     className="w-full text-sm py-2 mt-3 border-gray-300 text-black hover:bg-gray-100"
                     onClick={() => {
                       setStep("email");
+                      setFirstName("");
+                      setLastName("");
+                      setYear("");
+                      setSection("");
                       setPassword("");
-                      setName("");
                       console.log("Back to email step");
                     }}
                   >

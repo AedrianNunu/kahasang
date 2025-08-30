@@ -1,10 +1,8 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { motion, Variants } from "framer-motion";
-import { useState } from "react";
 
 const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -12,8 +10,6 @@ const sectionVariants: Variants = {
 };
 
 export default function FaqsSection() {
-  const [openDrawer, setOpenDrawer] = useState<string | null>(null);
-
   const faqs = [
     {
       question: "How do I borrow equipment?",
@@ -40,36 +36,18 @@ export default function FaqsSection() {
         <p className="text-black leading-relaxed mb-6 max-w-md mx-auto">
           Find answers to common questions about our equipment borrowing system at CHMSU.
         </p>
-        <div className="space-y-4">
+        <Accordion type="single" collapsible className="w-full">
           {faqs.map((faq, index) => (
-            <Drawer key={index} open={openDrawer === faq.question} onOpenChange={(open) => setOpenDrawer(open ? faq.question : null)}>
-              <DrawerTrigger asChild>
-                <Card
-                  className="cursor-pointer border-2 border-[#16a34a] shadow-md hover:shadow-lg transition-shadow duration-300"
-                  onClick={() => setOpenDrawer(faq.question)}
-                >
-                  <CardHeader className="p-4">
-                    <CardTitle className="text-lg font-semibold text-black">
-                      {faq.question}
-                    </CardTitle>
-                  </CardHeader>
-                </Card>
-              </DrawerTrigger>
-              <DrawerContent className="bg-white">
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold text-black mb-2">{faq.question}</h3>
-                  <p className="text-black text-sm">{faq.answer}</p>
-                  <Button
-                    className="mt-4 bg-[#16a34a] text-white hover:bg-green-700 rounded-md"
-                    onClick={() => setOpenDrawer(null)}
-                  >
-                    Close
-                  </Button>
-                </CardContent>
-              </DrawerContent>
-            </Drawer>
+            <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-200">
+              <AccordionTrigger className="text-lg font-semibold text-black hover:text-[#16a34a] py-4">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-sm text-black p-4 bg-gray-50">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
           ))}
-        </div>
+        </Accordion>
       </motion.div>
     </section>
   );

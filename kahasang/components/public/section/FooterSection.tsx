@@ -4,7 +4,7 @@ export default function FooterSection() {
   return (
     <section
       id="footer"
-      className="py-10 bg-[var(--blue)] text-white"
+      className="py-10 bg-green-600 text-white"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center sm:text-left">
